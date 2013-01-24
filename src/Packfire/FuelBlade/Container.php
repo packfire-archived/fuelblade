@@ -41,9 +41,7 @@ class Container implements IContainer, \ArrayAccess {
     }
     
     protected function loadValue($value){
-        if($value instanceof Closure){
-            return Closure::bind($value, $this, __CLASS__);
-        }elseif($value instanceof IConsumer){
+        if(is_object($value) && method_exists($value, '__invoke')){
             return $value($this);
         }else{
             return $value;
@@ -71,17 +69,17 @@ class Container implements IContainer, \ArrayAccess {
     }
 
     public function instance($class) {
-        return function()use(&$class){
+        return function()use($class){
             return new $class();
         };
     }
 
     public function share(Closure $callable) {
-        return function () use ($callable) {
+        return function ($c) use ($callable) {
             static $object = null;
 
             if (null === $object) {
-                $object = $this->loadValue($callable);
+                $object = $callable($c);
             }
 
             return $object;
