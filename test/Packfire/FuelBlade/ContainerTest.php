@@ -50,6 +50,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Packfire\FuelBlade\Container::offsetGet
+     * @expectedException \InvalidArgumentException
+     */
+    public function testOffsetGetFail()
+    {
+        $this->object->offsetGet('none');
+    }
+
+    /**
      * @covers Packfire\FuelBlade\Container::offsetSet
      */
     public function testOffsetSet()

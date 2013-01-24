@@ -33,7 +33,7 @@ class Container implements IContainer, \ArrayAccess {
 
     public function offsetGet($id) {
         if (!isset($this->values[$id])) {
-            throw new InvalidArgumentException(sprintf('"%s" is not defined in FuelBlade IoC container.', $id));
+            throw new \InvalidArgumentException(sprintf('"%s" is not defined in FuelBlade IoC container.', $id));
         }
         
         $value = $this->values[$id];
