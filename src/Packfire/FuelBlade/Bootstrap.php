@@ -17,9 +17,8 @@ namespace Packfire\FuelBlade;
  * @author Sam-Mauris Yong <sam@mauris.sg>
  * @copyright Sam-Mauris Yong <sam@mauris.sg>
  * @license http://www.opensource.org/licenses/BSD-3-Clause The BSD 3-Clause License
- * @package Packfire\PDC
- * @since 1.0.4
- * @link https://github.com/packfire/pdc/
+ * @package Packfire\FuelBlade
+ * @since 1.0.0
  */
 class Bootstrap {
 
