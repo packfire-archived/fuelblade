@@ -88,6 +88,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         
         $func = $this->object->copy($obj);
         $this->assertInstanceOf('\\stdClass', $func());
+        $value = $func();
+        $this->assertEquals($obj, $value);
     }
 
     /**
