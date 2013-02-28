@@ -20,9 +20,13 @@ namespace Packfire\FuelBlade;
  * @package Packfire\FuelBlade
  * @since 1.0.0
  */
-
 interface IConsumer {
     
+    /**
+     * Make the object invokable as a function
+     * @param \Packfire\FuelBlade\Container $container The container that the consumer is called from
+     * @since 1.0.0
+     */
     public function __invoke($container);
     
 }
