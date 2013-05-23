@@ -20,7 +20,7 @@ namespace Packfire\FuelBlade;
  * @package Packfire\FuelBlade
  * @since 1.0.0
  */
-interface IConsumer {
+interface ConsumerInterface {
     
     /**
      * Make the object invokable as a function

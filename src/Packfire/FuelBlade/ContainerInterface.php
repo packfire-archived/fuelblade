@@ -22,7 +22,7 @@ use \Closure;
  * @package Packfire\FuelBlade
  * @since 1.0.0
  */
-interface IContainer {
+interface ContainerInterface {
     
     /**
      * Create a function for creating an instance of a class
