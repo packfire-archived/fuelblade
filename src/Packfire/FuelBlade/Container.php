@@ -23,7 +23,7 @@ use \Closure;
  * @since 1.0.0
  */
 
-class Container implements IContainer, \ArrayAccess {
+class Container implements ContainerInterface, \ArrayAccess {
     
     /**
      * The values stored in the IoC container
