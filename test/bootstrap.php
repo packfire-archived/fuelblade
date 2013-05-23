@@ -1,3 +1,4 @@
 <?php
 
-require(__DIR__ . '/../src/Packfire/FuelBlade/Bootstrap.php');
+$loader = require(__DIR__ . '/../vendor/autoload.php');
+$loader->add('Packfire\\FuelBlade\\', __DIR__);

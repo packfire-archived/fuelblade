@@ -1,7 +1,7 @@
 <?php
 namespace Packfire\FuelBlade;
 
-class IConsumerTest extends \PHPUnit_Framework_TestCase implements IConsumer {
+class ConsumerInterfaceTest extends \PHPUnit_Framework_TestCase implements ConsumerInterface {
     
     private $loadedContainer;
     
