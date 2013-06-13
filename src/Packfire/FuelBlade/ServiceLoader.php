@@ -52,7 +52,7 @@ class ServiceLoader
                                 $instance = $reflect->newInstance();
                             }
                             if ($instance instanceof ConsumerInterface) {
-                                $instance($c);
+                                return $instance($c);
                             }
                             return $instance;
                         }
