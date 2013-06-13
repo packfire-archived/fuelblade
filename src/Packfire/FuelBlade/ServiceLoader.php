@@ -34,7 +34,7 @@ class ServiceLoader
             if (isset($service['class'])) {
                 $package = $service['class'];
                 $params = isset($service['parameters']) ? $service['parameters'] : null;
-                $c[$key] = $c->share(
+                $container[$key] = $container->share(
                     function ($c) use ($package, $params) {
                         if (class_exists($package)) {
                             $reflect = new \ReflectionClass($package);
@@ -59,7 +59,7 @@ class ServiceLoader
                     }
                 );
             } else {
-                throw new ServiceLoadingxception($key);
+                throw new ServiceLoadingException($key);
             }
         }
     }
