@@ -34,6 +34,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Packfire\FuelBlade\Container::offsetExists
+     * @covers Packfire\FuelBlade\Container::loadValue
      */
     public function testOffsetExists()
     {
@@ -49,6 +50,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $this->object->offsetGet('test.value'));
         $this->assertEquals(5, $this->object->offsetGet('test')->value);
         $this->assertEquals(5, $this->object['test.value']);
+    }
+
+    /**
+     * @covers Packfire\FuelBlade\Container::offsetGet
+     */
+    public function testOffsetGetContainer()
+    {
+        $this->object['obj'] = $this->object->share(
+            new ConsumerFixture()
+        );
+        $this->assertEquals($this->object, $this->object['obj']->container());
     }
 
     /**
