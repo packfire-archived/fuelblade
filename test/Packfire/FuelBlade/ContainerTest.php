@@ -38,6 +38,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testOffsetExists()
     {
         $this->assertTrue($this->object->offsetExists('test.value'));
+        $this->assertTrue(isset($this->object['test.value']));
     }
 
     /**
@@ -47,6 +48,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(5, $this->object->offsetGet('test.value'));
         $this->assertEquals(5, $this->object->offsetGet('test')->value);
+        $this->assertEquals(5, $this->object['test.value']);
     }
 
     /**
