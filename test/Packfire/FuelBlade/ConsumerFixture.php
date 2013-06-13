@@ -13,5 +13,6 @@ class ConsumerFixture implements ConsumerInterface
     public function __invoke($container)
     {
         $this->container = $container;
+        return $this;
     }
 }
