@@ -22,8 +22,8 @@ use \Closure;
  * @package Packfire\FuelBlade
  * @since 1.0.0
  */
-interface ContainerInterface {
-    
+interface ContainerInterface
+{
     /**
      * Create a function for creating an instance of a class
      * @param string $class The class name to create
@@ -63,5 +63,4 @@ interface ContainerInterface {
      * @since 1.0.0
      */
     public function value($key);
-    
 }

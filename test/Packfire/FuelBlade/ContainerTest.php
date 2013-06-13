@@ -19,8 +19,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->object = new Container;
         $this->object['test.value'] = 5;
-        $this->object['test'] = function($c){
-            return (object)array('value' => $c['test.value']);
+        $this->object['test'] = function ($c) {
+            return (object) array('value' => $c['test.value']);
         };
     }
 
@@ -82,7 +82,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopy()
     {
-        $obj = (object)array(
+        $obj = (object) array(
             'text' => 'Hello there!'
         );
         
@@ -97,7 +97,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testFunc()
     {
-        $func = function(){
+        $func = function () {
             return 'test';
         };
         
@@ -122,9 +122,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testShare()
     {
-        $this->object['obj'] = $this->object->share(function(){
-            return new \stdClass();
-        });
+        $this->object['obj'] = $this->object->share(
+            function () {
+                return new \stdClass();
+            }
+        );
         $this->assertInstanceOf('\\stdClass', $this->object['obj']);
         $obj1 = $this->object['obj'];
         $obj2 = $this->object['obj'];
