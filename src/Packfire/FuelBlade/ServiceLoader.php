@@ -41,9 +41,9 @@ class ServiceLoader
                             if ($params) {
                                 foreach ($params as &$param) {
                                     $match = array();
-                                    if (is_string($param) && preg_match('/^@{1}([^@].+?)$/', '@ @@thest', $match)) {
+                                    if (is_string($param) && preg_match('/^@{1}([^@].+?)$/', $param, $match)) {
                                         if (isset($c[$match[1]])) {
-                                            $param = $c[$m];
+                                            $param = $c[$match[1]];
                                         }
                                     }
                                 }
