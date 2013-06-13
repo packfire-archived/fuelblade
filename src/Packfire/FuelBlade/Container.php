@@ -140,11 +140,11 @@ class Container implements ContainerInterface, \ArrayAccess
     
     /**
      * Create a function that stores a shared value
-     * @param Closure $callable The closure that creates the value to be shared
+     * @param mixed $callable The closure or object to be shared
      * @return Closure Returns the anonymous function that encapsulates the creation process
      * @since 1.0.0
      */
-    public function share(Closure $callable)
+    public function share($callable)
     {
         return function ($c) use ($callable) {
             static $object = null;

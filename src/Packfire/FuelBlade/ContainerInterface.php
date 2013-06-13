@@ -38,7 +38,7 @@ interface ContainerInterface
      * @return Closure Returns the anonymous function that encapsulates the creation process
      * @since 1.0.0
      */
-    public function share(Closure $callable);
+    public function share($callable);
     
     /**
      * Create a function for storing a Closure
