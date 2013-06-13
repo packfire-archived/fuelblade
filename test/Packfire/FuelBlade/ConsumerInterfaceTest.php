@@ -1,11 +1,13 @@
 <?php
 namespace Packfire\FuelBlade;
 
-class ConsumerInterfaceTest extends \PHPUnit_Framework_TestCase implements ConsumerInterface {
+class ConsumerInterfaceTest extends \PHPUnit_Framework_TestCase implements ConsumerInterface
+{
     
     private $loadedContainer;
     
-    public function testInvoke(){
+    public function testInvoke()
+    {
         $c = new Container();
         $c['test'] = $this;
         $self = $c['test'];
@@ -13,10 +15,10 @@ class ConsumerInterfaceTest extends \PHPUnit_Framework_TestCase implements Consu
         $this->assertEquals($c, $self->loadedContainer);
     }
     
-    public function __invoke($container) {
+    public function __invoke($container)
+    {
         $this->assertInstanceOf('\\Packfire\\FuelBlade\\Container', $container);
         $this->loadedContainer = $container;
         return $this;
     }
-    
 }

@@ -11,21 +11,24 @@
 
 namespace Packfire\FuelBlade;
 
+use \RuntimeException;
+
 /**
- * Interfacing of a service consumer
- * 
+ * An exception occuring with the service loading
+ *
  * @author Sam-Mauris Yong <sam@mauris.sg>
  * @copyright Sam-Mauris Yong <sam@mauris.sg>
  * @license http://www.opensource.org/licenses/BSD-3-Clause The BSD 3-Clause License
  * @package Packfire\FuelBlade
- * @since 1.0.0
+ * @since 1.1.1
  */
-interface ConsumerInterface
+class ServiceLoadingException extends RuntimeException
 {
-    /**
-     * Make the object invokable as a function
-     * @param \Packfire\FuelBlade\Container $container The container that the consumer is called from
-     * @since 1.0.0
-     */
-    public function __invoke($container);
+    public function __construct($key)
+    {
+        parent::__construct(
+            'The service "' . $key . '" defined in the service configuration'
+            . ' does not contain a proper definition.'
+        );
+    }
 }
