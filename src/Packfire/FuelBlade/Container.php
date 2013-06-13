@@ -23,8 +23,8 @@ use \Closure;
  * @since 1.0.0
  */
 
-class Container implements ContainerInterface, \ArrayAccess {
-    
+class Container implements ContainerInterface, \ArrayAccess
+{
     /**
      * The values stored in the IoC container
      * @var array
@@ -39,7 +39,8 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return boolean
      * @since 1.0.0
      */
-    public function offsetExists($id) {
+    public function offsetExists($id)
+    {
         return isset($this->values[$id]);
     }
 
@@ -50,7 +51,8 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return mixed
      * @since 1.0.0
      */
-    public function offsetGet($id) {
+    public function offsetGet($id)
+    {
         if (!isset($this->values[$id])) {
             throw new \InvalidArgumentException(sprintf('"%s" is not defined in FuelBlade IoC container.', $id));
         }
@@ -65,10 +67,11 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return mixed Returns the value loaded
      * @since 1.0.0
      */
-    protected function loadValue($value){
-        if(is_object($value) && method_exists($value, '__invoke')){
+    protected function loadValue($value)
+    {
+        if (is_object($value) && method_exists($value, '__invoke')) {
             return $value($this);
-        }else{
+        } else {
             return $value;
         }
     }
@@ -80,7 +83,8 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @param mixed $value
      * @since 1.0.0
      */
-    public function offsetSet($id, $value) {
+    public function offsetSet($id, $value)
+    {
         $this->values[$id] = $value;
     }
 
@@ -90,7 +94,8 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @param string $id
      * @since 1.0.0
      */
-    public function offsetUnset($id) {
+    public function offsetUnset($id)
+    {
         unset($this->values[$id]);
     }
 
@@ -100,7 +105,8 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return Closure Returns the anonymous function that clones the object
      * @since 1.0.0
      */
-    public function copy($object) {
+    public function copy($object)
+    {
         return function () use ($object) {
             return clone $object;
         };
@@ -112,8 +118,9 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return Closure Returns the anonymous function that stores the original Closure
      * @since 1.0.0
      */
-    public function func(Closure $callable) {
-        return function()use(&$callable){
+    public function func(Closure $callable)
+    {
+        return function () use (&$callable) {
             return $callable;
         };
     }
@@ -124,19 +131,21 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return Closure Returns the anonymous function that clones the object
      * @since 1.0.0
      */
-    public function instance($class) {
-        return function()use($class){
+    public function instance($class)
+    {
+        return function () use ($class) {
             return new $class();
         };
     }
     
     /**
      * Create a function that stores a shared value
-     * @param Closure $callable The closure that creates the value to be shared
+     * @param mixed $callable The closure or object to be shared
      * @return Closure Returns the anonymous function that encapsulates the creation process
      * @since 1.0.0
      */
-    public function share(Closure $callable) {
+    public function share($callable)
+    {
         return function ($c) use ($callable) {
             static $object = null;
 
@@ -154,8 +163,8 @@ class Container implements ContainerInterface, \ArrayAccess {
      * @return mixed Returns the value
      * @since 1.0.0
      */
-    public function value($id){
+    public function value($id)
+    {
         return $this->values[$id];
     }
-    
 }

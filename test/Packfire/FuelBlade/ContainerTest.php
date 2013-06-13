@@ -19,8 +19,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->object = new Container;
         $this->object['test.value'] = 5;
-        $this->object['test'] = function($c){
-            return (object)array('value' => $c['test.value']);
+        $this->object['test'] = function ($c) {
+            return (object) array('value' => $c['test.value']);
         };
     }
 
@@ -34,10 +34,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Packfire\FuelBlade\Container::offsetExists
+     * @covers Packfire\FuelBlade\Container::loadValue
      */
     public function testOffsetExists()
     {
         $this->assertTrue($this->object->offsetExists('test.value'));
+        $this->assertTrue(isset($this->object['test.value']));
     }
 
     /**
@@ -47,6 +49,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(5, $this->object->offsetGet('test.value'));
         $this->assertEquals(5, $this->object->offsetGet('test')->value);
+        $this->assertEquals(5, $this->object['test.value']);
+    }
+
+    /**
+     * @covers Packfire\FuelBlade\Container::offsetGet
+     */
+    public function testOffsetGetContainer()
+    {
+        $this->object['obj'] = $this->object->share(
+            new ConsumerFixture()
+        );
+        $this->assertEquals($this->object, $this->object['obj']->container());
     }
 
     /**
@@ -82,7 +96,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopy()
     {
-        $obj = (object)array(
+        $obj = (object) array(
             'text' => 'Hello there!'
         );
         
@@ -97,7 +111,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testFunc()
     {
-        $func = function(){
+        $func = function () {
             return 'test';
         };
         
@@ -122,9 +136,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testShare()
     {
-        $this->object['obj'] = $this->object->share(function(){
-            return new \stdClass();
-        });
+        $this->object['obj'] = $this->object->share(
+            function () {
+                return new \stdClass();
+            }
+        );
         $this->assertInstanceOf('\\stdClass', $this->object['obj']);
         $obj1 = $this->object['obj'];
         $obj2 = $this->object['obj'];
