@@ -127,15 +127,42 @@ class Container implements ContainerInterface, \ArrayAccess
 
     /**
      * Create a function for creating an instance of a class
-     * @param string $class The class name to create
+     * @param string $className The class name to create
      * @return Closure Returns the anonymous function that clones the object
      * @since 1.0.0
      */
-    public function instance($class)
+    public function instance($className)
     {
-        return function () use ($class) {
-            return new $class();
+        return function ($container) use ($className) {
+            $class = new \ReflectionClass($className);
+            $constructor = $class->getConstructor();
+            if ($constructor) {
+                $arguments = Container::buildDependencies($container, $constructor);
+                return $class->newInstanceArgs($arguments);
+            } else {
+                return $class->newInstance();
+            }
         };
+    }
+
+    public static function buildDependencies(ContainerInterface $container, \ReflectionMethod $constructor)
+    {
+        $parameters = $constructor->getParameters();
+        $args = array();
+        foreach ($parameters as $parameter) {
+            $value = $parameter->getDefaultValue();
+            if ($class = $parameter->getClass()) {
+                if (isset($container[$class->name])) {
+                    $value = $container[$class->name];
+                } else {
+                    throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
+                }
+            } else {
+                throw new \RuntimeException('Unable to build required constructor parameter "$' . $parameter->name . '" for ' . $constructor->getDeclaringClass()->name . '.');
+            }
+            $args[] = $value;
+        }
+        return $args;
     }
 
     /**
