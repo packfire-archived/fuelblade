@@ -157,7 +157,7 @@ class Container implements ContainerInterface, \ArrayAccess
                 } else {
                     throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
                 }
-            } else {
+            } elseif (!$parameter->isDefaultValueAvailable()) {
                 throw new \RuntimeException('Unable to build required constructor parameter "$' . $parameter->name . '" for ' . $constructor->getDeclaringClass()->name . '.');
             }
             $args[] = $value;
