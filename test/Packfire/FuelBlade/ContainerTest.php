@@ -112,6 +112,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj2 !== $obj1);
     }
 
+    public function testInstanceArgs()
+    {
+        $container = new Container();
+        $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
+
+        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ConsumerFixture');
+        $obj = $container['fixture'];
+
+        $this->assertEquals($container, $obj->container());
+    }
+
     public function testShare()
     {
         $this->object['obj'] = $this->object->share(
