@@ -18,9 +18,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->object = new Container;
-        $this->object['test.value'] = 5;
+        $this->object['test.number'] = 5;
         $this->object['test'] = function ($c) {
-            return (object) array('value' => $c['test.value']);
+            return (object) array('value' => $c['test.number']);
         };
     }
 
@@ -38,8 +38,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOffsetExists()
     {
-        $this->assertTrue($this->object->offsetExists('test.value'));
-        $this->assertTrue(isset($this->object['test.value']));
+        $this->assertTrue($this->object->offsetExists('test.number'));
+        $this->assertTrue(isset($this->object['test.number']));
     }
 
     /**
@@ -47,14 +47,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOffsetGet()
     {
-        $this->assertEquals(5, $this->object->offsetGet('test.value'));
+        $this->assertEquals(5, $this->object->offsetGet('test.number'));
         $this->assertEquals(5, $this->object->offsetGet('test')->value);
-        $this->assertEquals(5, $this->object['test.value']);
+        $this->assertEquals(5, $this->object['test.number']);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::offsetGet
-     */
     public function testOffsetGetContainer()
     {
         $this->object['obj'] = $this->object->share(
@@ -64,7 +61,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Packfire\FuelBlade\Container::offsetGet
      * @expectedException \InvalidArgumentException
      */
     public function testOffsetGetFail()
@@ -72,56 +68,41 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->object->offsetGet('none');
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::offsetSet
-     */
     public function testOffsetSet()
     {
         $this->assertEquals(5, $this->object->offsetGet('test')->value);
-        $this->object->offsetSet('test.value', 10);
+        $this->object->offsetSet('test.number', 10);
         $this->assertEquals(10, $this->object->offsetGet('test')->value);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::offsetUnset
-     */
     public function testOffsetUnset()
     {
         unset($this->object['test']);
         $this->assertArrayNotHasKey('test', $this->object);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::copy
-     */
     public function testCopy()
     {
         $obj = (object) array(
             'text' => 'Hello there!'
         );
-        
+
         $func = $this->object->copy($obj);
-        $this->assertInstanceOf('\\stdClass', $func());
+        $this->assertInstanceOf('stdClass', $func());
         $value = $func();
         $this->assertEquals($obj, $value);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::func
-     */
     public function testFunc()
     {
         $func = function () {
             return 'test';
         };
-        
+
         $this->object['func'] = $this->object->func($func);
         $this->assertEquals($func, $this->object['func']);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::instance
-     */
     public function testInstance()
     {
         $this->object['obj'] = $this->object->instance('\\stdClass');
@@ -131,9 +112,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj2 !== $obj1);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::share
-     */
     public function testShare()
     {
         $this->object['obj'] = $this->object->share(
@@ -147,12 +125,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj2 === $obj1);
     }
 
-    /**
-     * @covers Packfire\FuelBlade\Container::value
-     */
     public function testValue()
     {
         $this->assertInstanceOf('\\Closure', $this->object->value('test'));
-        $this->assertEquals(5, $this->object->value('test.value'));
+        $this->assertEquals(5, $this->object->value('test.number'));
     }
 }

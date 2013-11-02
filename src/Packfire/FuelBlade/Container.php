@@ -3,7 +3,7 @@
 /**
  * Packfire FuelBlade
  * By Sam-Mauris Yong
- * 
+ *
  * Released open source under New BSD 3-Clause License.
  * Copyright (c) Sam-Mauris Yong <sam@mauris.sg>
  * All rights reserved.
@@ -15,7 +15,7 @@ use \Closure;
 
 /**
  * The dependency injection / IoC container
- * 
+ *
  * @author Sam-Mauris Yong <sam@mauris.sg>
  * @copyright Sam-Mauris Yong <sam@mauris.sg>
  * @license http://www.opensource.org/licenses/BSD-3-Clause The BSD 3-Clause License
@@ -31,7 +31,7 @@ class Container implements ContainerInterface, \ArrayAccess
      * @since 1.0.0
      */
     protected $values = array();
-    
+
     /**
      * Provides implementation of offsetExists in \ArrayAccess
      * @internal
@@ -56,11 +56,11 @@ class Container implements ContainerInterface, \ArrayAccess
         if (!isset($this->values[$id])) {
             throw new \InvalidArgumentException(sprintf('"%s" is not defined in FuelBlade IoC container.', $id));
         }
-        
+
         $value = $this->values[$id];
         return $this->loadValue($value);
     }
-    
+
     /**
      * Load a value to see if it can be invoked to get the actual value
      * @param mixed $value The value to be loaded
@@ -111,7 +111,7 @@ class Container implements ContainerInterface, \ArrayAccess
             return clone $object;
         };
     }
-    
+
     /**
      * Create a function for storing a Closure
      * @param Closure The closure to be stored.
@@ -124,7 +124,7 @@ class Container implements ContainerInterface, \ArrayAccess
             return $callable;
         };
     }
-    
+
     /**
      * Create a function for creating an instance of a class
      * @param string $class The class name to create
@@ -137,7 +137,7 @@ class Container implements ContainerInterface, \ArrayAccess
             return new $class();
         };
     }
-    
+
     /**
      * Create a function that stores a shared value
      * @param mixed $callable The closure or object to be shared
@@ -156,7 +156,7 @@ class Container implements ContainerInterface, \ArrayAccess
             return $object;
         };
     }
-    
+
     /**
      * Get a value from the container
      * @param string $id The key of the value
