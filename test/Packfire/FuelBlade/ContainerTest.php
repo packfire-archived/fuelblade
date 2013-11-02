@@ -133,6 +133,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $obj = $container['fixture'];
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testInstanceArgsFail2()
+    {
+        $container = new Container();
+        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ServiceLoadingException');
+        $obj = $container['fixture'];
+    }
+
     public function testShare()
     {
         $this->object['obj'] = $this->object->share(

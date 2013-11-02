@@ -150,7 +150,10 @@ class Container implements ContainerInterface, \ArrayAccess
         $parameters = $constructor->getParameters();
         $args = array();
         foreach ($parameters as $parameter) {
-            $value = $parameter->getDefaultValue();
+            $value = null;
+            if ($parameter->isDefaultValueAvailable()) {
+                $value = $parameter->getDefaultValue();
+            }
             if ($class = $parameter->getClass()) {
                 if (isset($container[$class->name])) {
                     $value = $container[$class->name];
