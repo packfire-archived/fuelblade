@@ -3,7 +3,7 @@
 /**
  * Packfire FuelBlade
  * By Sam-Mauris Yong
- * 
+ *
  * Released open source under New BSD 3-Clause License.
  * Copyright (c) Sam-Mauris Yong <sam@mauris.sg>
  * All rights reserved.
@@ -13,7 +13,7 @@ namespace Packfire\FuelBlade;
 
 /**
  * Loads configuration for a IoC
- * 
+ *
  * @author Sam-Mauris Yong <sam@mauris.sg>
  * @copyright Sam-Mauris Yong <sam@mauris.sg>
  * @license http://www.opensource.org/licenses/BSD-3-Clause The BSD 3-Clause License

@@ -3,7 +3,7 @@
 /**
  * Packfire FuelBlade
  * By Sam-Mauris Yong
- * 
+ *
  * Released open source under New BSD 3-Clause License.
  * Copyright (c) Sam-Mauris Yong <sam@mauris.sg>
  * All rights reserved.
@@ -15,7 +15,7 @@ use \Closure;
 
 /**
  * The dependency injection / IoC container
- * 
+ *
  * @author Sam-Mauris Yong <sam@mauris.sg>
  * @copyright Sam-Mauris Yong <sam@mauris.sg>
  * @license http://www.opensource.org/licenses/BSD-3-Clause The BSD 3-Clause License
@@ -31,7 +31,7 @@ class Container implements ContainerInterface, \ArrayAccess
      * @since 1.0.0
      */
     protected $values = array();
-    
+
     /**
      * Provides implementation of offsetExists in \ArrayAccess
      * @internal
@@ -56,11 +56,11 @@ class Container implements ContainerInterface, \ArrayAccess
         if (!isset($this->values[$id])) {
             throw new \InvalidArgumentException(sprintf('"%s" is not defined in FuelBlade IoC container.', $id));
         }
-        
+
         $value = $this->values[$id];
         return $this->loadValue($value);
     }
-    
+
     /**
      * Load a value to see if it can be invoked to get the actual value
      * @param mixed $value The value to be loaded
@@ -111,7 +111,7 @@ class Container implements ContainerInterface, \ArrayAccess
             return clone $object;
         };
     }
-    
+
     /**
      * Create a function for storing a Closure
      * @param Closure The closure to be stored.
@@ -124,20 +124,57 @@ class Container implements ContainerInterface, \ArrayAccess
             return $callable;
         };
     }
-    
+
     /**
      * Create a function for creating an instance of a class
-     * @param string $class The class name to create
+     * @param string $className The class name to create
      * @return Closure Returns the anonymous function that clones the object
      * @since 1.0.0
      */
-    public function instance($class)
+    public function instance($className)
     {
-        return function () use ($class) {
-            return new $class();
+        return function ($container) use ($className) {
+            $class = new \ReflectionClass($className);
+            $constructor = $class->getConstructor();
+            if ($constructor) {
+                $arguments = Container::buildDependencies($container, $constructor);
+                return $class->newInstanceArgs($arguments);
+            } else {
+                return $class->newInstance();
+            }
         };
     }
-    
+
+    /**
+     * Build and load an array of dependencies from the constructor
+     * @param Packfire\FuelBlade\ContainerInterface $container The container to get the values from
+     * @param ReflectionMethod $constructor The reflection of the class constructor
+     * @return array Returns an array of arguments that fit the constructor's parameters list.
+     * @since 1.1.2
+     */
+    public static function buildDependencies(ContainerInterface $container, \ReflectionMethod $constructor)
+    {
+        $parameters = $constructor->getParameters();
+        $args = array();
+        foreach ($parameters as $parameter) {
+            $value = null;
+            if ($parameter->isDefaultValueAvailable()) {
+                $value = $parameter->getDefaultValue();
+            }
+            if ($class = $parameter->getClass()) {
+                if (isset($container[$class->name])) {
+                    $value = $container[$class->name];
+                } else {
+                    throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
+                }
+            } elseif (!$parameter->isDefaultValueAvailable()) {
+                throw new \RuntimeException('Unable to build required constructor parameter "$' . $parameter->name . '" for ' . $constructor->getDeclaringClass()->name . '.');
+            }
+            $args[] = $value;
+        }
+        return $args;
+    }
+
     /**
      * Create a function that stores a shared value
      * @param mixed $callable The closure or object to be shared
@@ -156,7 +193,7 @@ class Container implements ContainerInterface, \ArrayAccess
             return $object;
         };
     }
-    
+
     /**
      * Get a value from the container
      * @param string $id The key of the value
