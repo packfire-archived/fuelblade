@@ -145,6 +145,13 @@ class Container implements ContainerInterface, \ArrayAccess
         };
     }
 
+    /**
+     * Build and load an array of dependencies from the constructor
+     * @param Packfire\FuelBlade\ContainerInterface $container The container to get the values from
+     * @param ReflectionMethod $constructor The reflection of the class constructor
+     * @return array Returns an array of arguments that fit the constructor's parameters list.
+     * @since 1.1.2
+     */
     public static function buildDependencies(ContainerInterface $container, \ReflectionMethod $constructor)
     {
         $parameters = $constructor->getParameters();
