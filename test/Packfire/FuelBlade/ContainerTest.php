@@ -123,6 +123,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($container, $obj->container());
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testInstanceArgsFail1()
+    {
+        $container = new Container();
+        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ConsumerFixture');
+        $obj = $container['fixture'];
+    }
+
     public function testShare()
     {
         $this->object['obj'] = $this->object->share(
