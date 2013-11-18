@@ -146,6 +146,19 @@ class Container implements ContainerInterface, \ArrayAccess
     }
 
     /**
+     * Create a function for storing an alias
+     * @param string $name The name of the concrete IoC key
+     * @return Closure Returns the anonymous function that stores the alias
+     * @since 2.0.0
+     */
+    public function alias($name)
+    {
+        return function ($container) use ($name) {
+            return $container[$name];
+        };
+    }
+
+    /**
      * Build and load an array of dependencies from the constructor
      * @param Packfire\FuelBlade\ContainerInterface $container The container to get the values from
      * @param ReflectionMethod $constructor The reflection of the class constructor
