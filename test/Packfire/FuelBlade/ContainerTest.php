@@ -103,6 +103,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($func, $this->object['func']);
     }
 
+    public function testAlias()
+    {
+        $this->object['cool'] = $this->object->alias('test.number');
+        $this->assertEquals($this->object['test.number'], $this->object['cool']);
+    }
+
     public function testInstance()
     {
         $this->object['obj'] = $this->object->instance('\\stdClass');
