@@ -145,6 +145,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($container, $fixture->container());
     }
 
+    public function testInstantiateArgsParams()
+    {
+        $container = new Container();
+        $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
+        $fixture = $container->instantiate('Packfire\\FuelBlade\\ConsumerFixture', array('state' => 5));
+
+        $this->assertEquals(5, $fixture->state());
+    }
 
     /**
      * @expectedException \RuntimeException
