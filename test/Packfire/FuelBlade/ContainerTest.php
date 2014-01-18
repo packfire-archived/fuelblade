@@ -129,6 +129,23 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($container, $obj->container());
     }
 
+    public function testInstantiate()
+    {
+        $obj = $this->object->instantiate('\\stdClass');
+        $this->assertInstanceOf('\\stdClass', $obj);
+    }
+
+    public function testInstantiateArgs()
+    {
+        $container = new Container();
+        $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
+
+        $fixture = $container>instantiate('Packfire\\FuelBlade\\ConsumerFixture');
+
+        $this->assertEquals($container, $fixture->container());
+    }
+
+
     /**
      * @expectedException \RuntimeException
      */
