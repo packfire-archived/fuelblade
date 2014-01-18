@@ -5,9 +5,17 @@ class ConsumerFixture implements ConsumerInterface
 {
     protected $container;
 
-    public function __construct(ContainerInterface $container = null)
+    protected $state;
+
+    public function __construct(ContainerInterface $container = null, $state = null)
     {
         $this->container = $container;
+        $this->state = $state;
+    }
+
+    public function state()
+    {
+        return $this->state;
     }
 
     public function container()
