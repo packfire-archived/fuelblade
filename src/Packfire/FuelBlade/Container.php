@@ -151,7 +151,7 @@ class Container implements ContainerInterface, \ArrayAccess
         $class = new \ReflectionClass($className);
         $constructor = $class->getConstructor();
         if ($constructor) {
-            $arguments = Container::buildDependencies($this, $constructor);
+            $arguments = Container::buildDependencies($this, $constructor, $params);
             return $class->newInstanceArgs($arguments);
         } else {
             return $class->newInstance();
@@ -162,7 +162,7 @@ class Container implements ContainerInterface, \ArrayAccess
      * Create a function for storing an alias
      * @param string $name The name of the concrete IoC key
      * @return Closure Returns the anonymous function that stores the alias
-     * @since 2.0.0
+     * @since 1.2.0
      */
     public function alias($name)
     {
@@ -175,10 +175,11 @@ class Container implements ContainerInterface, \ArrayAccess
      * Build and load an array of dependencies from the constructor
      * @param Packfire\FuelBlade\ContainerInterface $container The container to get the values from
      * @param ReflectionMethod $constructor The reflection of the class constructor
+     * @param array $params (optional) An array of arguments to be passed to the constructor.
      * @return array Returns an array of arguments that fit the constructor's parameters list.
      * @since 1.1.2
      */
-    public static function buildDependencies(ContainerInterface $container, \ReflectionMethod $constructor)
+    public static function buildDependencies(ContainerInterface $container, \ReflectionMethod $constructor, $params = array())
     {
         $parameters = $constructor->getParameters();
         $args = array();
@@ -187,14 +188,18 @@ class Container implements ContainerInterface, \ArrayAccess
             if ($parameter->isDefaultValueAvailable()) {
                 $value = $parameter->getDefaultValue();
             }
-            if ($class = $parameter->getClass()) {
-                if (isset($container[$class->name])) {
-                    $value = $container[$class->name];
-                } else {
-                    throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
+            if (isset($params[$parameter->getName()])) {
+                $value = $params[$parameter->getName()];
+            } else {
+                if ($class = $parameter->getClass()) {
+                    if (isset($container[$class->name])) {
+                        $value = $container[$class->name];
+                    } else {
+                        throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
+                    }
+                } elseif (!$parameter->isDefaultValueAvailable()) {
+                    throw new \RuntimeException('Unable to build required constructor parameter "$' . $parameter->name . '" for ' . $constructor->getDeclaringClass()->name . '.');
                 }
-            } elseif (!$parameter->isDefaultValueAvailable()) {
-                throw new \RuntimeException('Unable to build required constructor parameter "$' . $parameter->name . '" for ' . $constructor->getDeclaringClass()->name . '.');
             }
             $args[] = $value;
         }
