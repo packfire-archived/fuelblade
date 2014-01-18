@@ -27,18 +27,20 @@ interface ContainerInterface
     /**
      * Create a function for creating an instance of a class
      * @param string $class The class name to create
+     * @param array $params (optional) An array of arguments to be passed to the constructor.
      * @return Closure Returns the anonymous function that clones the object
      * @since 1.0.0
      */
-    public function instance($class);
+    public function instance($class, $params = array());
 
     /**
      * Create an instance of a class
      * @param string $className The class name to create
+     * @param array $params (optional) An array of arguments to be passed to the constructor.
      * @return object Returns the instance of the class created.
      * @since 1.2.0
      */
-    public function instantiate($class);
+    public function instantiate($class, $params = array());
 
     /**
      * Create a function that stores a shared value

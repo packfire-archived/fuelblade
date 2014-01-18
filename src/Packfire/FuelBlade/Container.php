@@ -128,23 +128,25 @@ class Container implements ContainerInterface, \ArrayAccess
     /**
      * Create a function for creating an instance of a class
      * @param string $className The class name to create
+     * @param array $params (optional) An array of arguments to be passed to the constructor.
      * @return Closure Returns the anonymous function that clones the object
      * @since 1.0.0
      */
-    public function instance($className)
+    public function instance($className, $params = array())
     {
-        return function ($container) use ($className) {
-            return $container->instantiate($className);
+        return function ($container) use ($className, $params) {
+            return $container->instantiate($className, $params);
         };
     }
 
     /**
      * Create an instance of a class
      * @param string $className The class name to create
+     * @param array $params (optional) An array of arguments to be passed to the constructor.
      * @return object Returns the instance of the class created.
      * @since 1.2.0
      */
-    public function instantiate($className)
+    public function instantiate($className, $params = array())
     {
         $class = new \ReflectionClass($className);
         $constructor = $class->getConstructor();
