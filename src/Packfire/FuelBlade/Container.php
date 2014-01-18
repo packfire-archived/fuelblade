@@ -134,15 +134,26 @@ class Container implements ContainerInterface, \ArrayAccess
     public function instance($className)
     {
         return function ($container) use ($className) {
-            $class = new \ReflectionClass($className);
-            $constructor = $class->getConstructor();
-            if ($constructor) {
-                $arguments = Container::buildDependencies($container, $constructor);
-                return $class->newInstanceArgs($arguments);
-            } else {
-                return $class->newInstance();
-            }
+            return $container->instantiate($className);
         };
+    }
+
+    /**
+     * Create an instance of a class
+     * @param string $className The class name to create
+     * @return object Returns the instance of the class created.
+     * @since 1.2.0
+     */
+    public function instantiate($className)
+    {
+        $class = new \ReflectionClass($className);
+        $constructor = $class->getConstructor();
+        if ($constructor) {
+            $arguments = Container::buildDependencies($this, $constructor);
+            return $class->newInstanceArgs($arguments);
+        } else {
+            return $class->newInstance();
+        }
     }
 
     /**
