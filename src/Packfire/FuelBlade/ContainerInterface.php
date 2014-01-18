@@ -33,6 +33,14 @@ interface ContainerInterface
     public function instance($class);
 
     /**
+     * Create an instance of a class
+     * @param string $className The class name to create
+     * @return object Returns the instance of the class created.
+     * @since 1.2.0
+     */
+    public function instantiate($class);
+
+    /**
      * Create a function that stores a shared value
      * @param Closure $callable The closure that creates the value to be shared
      * @return Closure Returns the anonymous function that encapsulates the creation process
