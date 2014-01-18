@@ -123,7 +123,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
 
-        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ConsumerFixture');
+        $container['fixture'] = $container->instance('Packfire\\FuelBlade\\ConsumerFixture');
         $obj = $container['fixture'];
 
         $this->assertEquals($container, $obj->container());
@@ -140,7 +140,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
 
-        $fixture = $container>instantiate('Packfire\\FuelBlade\\ConsumerFixture');
+        $fixture = $container->instantiate('Packfire\\FuelBlade\\ConsumerFixture');
 
         $this->assertEquals($container, $fixture->container());
     }
@@ -152,7 +152,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testInstanceArgsFail1()
     {
         $container = new Container();
-        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ConsumerFixture');
+        $container['fixture'] = $container->instance('Packfire\\FuelBlade\\ConsumerFixture');
         $obj = $container['fixture'];
     }
 
@@ -162,7 +162,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testInstanceArgsFail2()
     {
         $container = new Container();
-        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ServiceLoadingException');
+        $container['fixture'] = $container->instance('Packfire\\FuelBlade\\ServiceLoadingException');
         $obj = $container['fixture'];
     }
 
