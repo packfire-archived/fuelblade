@@ -103,6 +103,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($func, $this->object['func']);
     }
 
+    public function testAlias()
+    {
+        $this->object['cool'] = $this->object->alias('test.number');
+        $this->assertEquals($this->object['test.number'], $this->object['cool']);
+    }
+
     public function testInstance()
     {
         $this->object['obj'] = $this->object->instance('\\stdClass');
@@ -117,11 +123,28 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
 
-        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ConsumerFixture');
+        $container['fixture'] = $container->instance('Packfire\\FuelBlade\\ConsumerFixture');
         $obj = $container['fixture'];
 
         $this->assertEquals($container, $obj->container());
     }
+
+    public function testInstantiate()
+    {
+        $obj = $this->object->instantiate('\\stdClass');
+        $this->assertInstanceOf('\\stdClass', $obj);
+    }
+
+    public function testInstantiateArgs()
+    {
+        $container = new Container();
+        $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
+
+        $fixture = $container->instantiate('Packfire\\FuelBlade\\ConsumerFixture');
+
+        $this->assertEquals($container, $fixture->container());
+    }
+
 
     /**
      * @expectedException \RuntimeException
@@ -129,7 +152,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testInstanceArgsFail1()
     {
         $container = new Container();
-        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ConsumerFixture');
+        $container['fixture'] = $container->instance('Packfire\\FuelBlade\\ConsumerFixture');
         $obj = $container['fixture'];
     }
 
@@ -139,7 +162,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testInstanceArgsFail2()
     {
         $container = new Container();
-        $container['fixture'] = $this->object->instance('Packfire\\FuelBlade\\ServiceLoadingException');
+        $container['fixture'] = $container->instance('Packfire\\FuelBlade\\ServiceLoadingException');
         $obj = $container['fixture'];
     }
 

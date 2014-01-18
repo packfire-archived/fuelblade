@@ -57,6 +57,14 @@ interface ContainerInterface
     public function copy($object);
 
     /**
+     * Create a function for storing an alias
+     * @param string $name The name of the concrete IoC key
+     * @return Closure Returns the anonymous function that stores the alias
+     * @since 2.0.0
+     */
+    public function alias($name);
+
+    /**
      * Get a value from the container
      * @param string $id The key of the value
      * @return mixed Returns the value
