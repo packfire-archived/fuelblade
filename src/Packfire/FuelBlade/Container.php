@@ -150,12 +150,17 @@ class Container implements ContainerInterface, \ArrayAccess
     {
         $class = new \ReflectionClass($className);
         $constructor = $class->getConstructor();
+        $result = null;
         if ($constructor) {
             $arguments = Container::buildDependencies($this, $constructor, $params);
-            return $class->newInstanceArgs($arguments);
+            $result = $class->newInstanceArgs($arguments);
         } else {
-            return $class->newInstance();
+            $result = $class->newInstance();
         }
+        if ($result instanceof ConsumerInterface) {
+            $result($this);
+        }
+        return $result;
     }
 
     /**
