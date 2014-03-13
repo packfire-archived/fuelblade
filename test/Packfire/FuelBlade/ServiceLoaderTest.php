@@ -51,12 +51,15 @@ class ServiceLoadertest extends \PHPUnit_Framework_TestCase
 
     public function testLoadConsumer()
     {
+        $container = new Container();
         $services = array(
             'test' => array(
-                'class' => '\\Packfire\\FuelBlade\\ConsumerFixture'
+                'class' => '\\Packfire\\FuelBlade\\ConsumerFixture',
+                'parameters' => array(
+                    $container
+                )
             )
         );
-        $container = new Container();
         ServiceLoader::load($container, $services);
         $this->assertTrue(isset($container['test']));
         $this->assertInstanceOf('\\Packfire\\FuelBlade\\ConsumerFixture', $container['test']);

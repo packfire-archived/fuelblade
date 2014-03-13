@@ -55,7 +55,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testOffsetGetContainer()
     {
         $this->object['obj'] = $this->object->share(
-            new ConsumerFixture()
+            new ConsumerFixture($this->object)
         );
         $this->assertEquals($this->object, $this->object['obj']->container());
     }
@@ -149,9 +149,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $container['Packfire\\FuelBlade\\ContainerInterface'] = $container;
-        $fixture = $container->instantiate('Packfire\\FuelBlade\\ConsumerFixture', array('state' => 5));
+        $mock = $this->getMock('Packfire\\FuelBlade\\ConsumerInterface');
 
-        $this->assertEquals(5, $fixture->state());
+        $fixture = $container->instantiate('Packfire\\FuelBlade\\ConsumerFixture', array('state' => $mock));
+
+        $this->assertEquals($mock, $fixture->state());
     }
 
     /**
