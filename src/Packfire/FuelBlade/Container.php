@@ -190,19 +190,17 @@ class Container implements ContainerInterface, \ArrayAccess
         $args = array();
         foreach ($parameters as $parameter) {
             $value = null;
-            if ($parameter->isDefaultValueAvailable()) {
-                $value = $parameter->getDefaultValue();
-            }
             if (isset($params[$parameter->getName()])) {
                 $value = $params[$parameter->getName()];
             } else {
-                if ($class = $parameter->getClass()) {
-                    if (isset($container[$class->name])) {
+                $class = $parameter->getClass();
+                if ($class && isset($container[$class->name])) {
                         $value = $container[$class->name];
-                    } else {
-                        throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
-                    }
-                } elseif (!$parameter->isDefaultValueAvailable()) {
+                } elseif ($parameter->isDefaultValueAvailable()) {
+                    $value = $parameter->getDefaultValue();
+                } elseif ($class) {
+                    throw new \RuntimeException('Unable to find and build dependency "' . $class->name . '" for "' . $constructor->getDeclaringClass()->name . '::__construct()".');
+                } else {
                     throw new \RuntimeException('Unable to build required constructor parameter "$' . $parameter->name . '" for ' . $constructor->getDeclaringClass()->name . '.');
                 }
             }
